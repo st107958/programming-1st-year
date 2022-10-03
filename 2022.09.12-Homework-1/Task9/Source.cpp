@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 	int tet = 0;
 	
 	std::cin >> x;
-	
+
 	sq = x * x;
 	tet = sq * sq;
 	
