@@ -2,47 +2,40 @@
 
 int main(int argc, char* argv[])
 {
-	int n, i, x, k = 0;
-	int b = 0;
-	int a[1001]{};
-	int mn = 100000000;
+	int n = 0;
+	int a[1000]{ 0 };
+	int x = 0;
+	int minr = 2001;
+	int minch = 1001;
+
 	std::cin >> n;
-	for (i = 0; i < n; i++)
+
+	for (int i = 0; i < n; ++i)
 	{
 		std::cin >> a[i];
 	}
+
 	std::cin >> x;
-	for (i = 0; i < n; i++)
+
+	for (int i = 0; i < n; ++i)
 	{
-		if (a[i] == x)
+		if (abs(a[i] - x) <= minr)
 		{
-			k = a[i];
-		}
-	}
-	b = a[0];
-	if (k == 0)
-	{
-		for (i = 0; i < n; i++)
-		{
-			if (abs(a[i] - x) <= mn)
+			if (abs((a[i] - x) == minr) && (a[i]) < minch)
 			{
-				mn = abs(a[i] - x);
-				b = a[i];
+				minch = a[i];
+				minr = abs(a[i] - x);
+			}
+
+			if (abs(a[i] - x) < minr)
+			{
+				minch = a[i];
+				minr = abs(a[i] - x);
 			}
 		}
-		for (i = 0; i < n; i++)
-		{
-			if (abs(a[i] - x) == mn)
-			{
-				if (b > a[i])
-					b = a[i];
-			}
-		}
-		std::cout << b << std::endl;
 	}
-	else
-	{
-		std::cout << k << std::endl;
-	}
+
+	std::cout << minch << std::endl;
+
 	return EXIT_SUCCESS;
 }
