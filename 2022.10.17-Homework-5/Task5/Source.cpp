@@ -1,68 +1,48 @@
-#include <iostream>
+#include<iostream>
 
 int main(int argc, char* argv[])
 {
-	int n = 0;
-	int a[1001]{ 0 };
-	int min = 1000;
-	int m = 1001;
-	int x = 0;
-
+	int n, i, x, k = 0;
+	int b = 0;
+	int a[1001]{};
+	int mn = 100000000;
 	std::cin >> n;
-
-	for (int i = 0; i < n; i++)
+	for (i = 0; i < n; i++)
 	{
 		std::cin >> a[i];
 	}
-	
 	std::cin >> x;
-
-	for (int j = 0; j < n; j++)
+	for (i = 0; i < n; i++)
 	{
-		if (x > a[j])
+		if (a[i] == x)
 		{
-			if (x - a[j] <= min)
-			{
-				if (x - a[j] == min)
-				{
-					if (a[j] < m)
-					{
-						m = a[j];
-					}
-				}
-
-				if(x - a[j] < min)
-				{
-					m = a[j];
-				}
-
-				min = x - a[j];
-			}
-		}
-
-		if (x < a[j])
-		{
-			if (a[j] - x <= min)
-			{
-				if (a[j] - x == min)
-				{
-					if (a[j] < m)
-					{
-						m = a[j];
-					}
-				}
-
-				if(a[j] - x < min)
-				{
-					m = a[j];
-				}
-
-				min = x - a[j];
-			}
+			k = a[i];
 		}
 	}
-
-	std::cout << m << std::endl;
-
+	b = a[0];
+	if (k == 0)
+	{
+		for (i = 0; i < n; i++)
+		{
+			if (abs(a[i] - x) <= mn)
+			{
+				mn = abs(a[i] - x);
+				b = a[i];
+			}
+		}
+		for (i = 0; i < n; i++)
+		{
+			if (abs(a[i] - x) == mn)
+			{
+				if (b > a[i])
+					b = a[i];
+			}
+		}
+		std::cout << b << std::endl;
+	}
+	else
+	{
+		std::cout << k << std::endl;
+	}
 	return EXIT_SUCCESS;
 }
