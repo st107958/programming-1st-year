@@ -18,7 +18,7 @@ void pos(int n)
 
 		pos(n - 1);
 
-		std::cout << a « " ";
+		std::cout << a << " ";
 	}
 }
 

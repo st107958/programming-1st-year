@@ -1,6 +1,6 @@
 #include <iostream>
 
-void pos(int n, int g)
+void p(int n, int g)
 {
 	if (n < g * g)
 	{
@@ -15,7 +15,7 @@ void pos(int n, int g)
 		}
 		else
 		{
-			pos(n, g + 1);
+			p(n, g + 1);
 		}
 	}
 }
@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 
 	std::cin >> n;
 
-	pos(n, 2);
+	p(n, 2);
 
 	return EXIT_SUCCESS;
 }
