@@ -1,6 +1,6 @@
 #include <iostream>
 
-void pos(int n)
+void p(int n)
 {
 	if (n == 1)
 	{
@@ -16,7 +16,7 @@ void pos(int n)
 
 		std::cin >> a;
 
-		pos(n - 1);
+		p(n - 1);
 
 		std::cout << a << " ";
 	}
@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 
 	std::cin >> n;
 
-	pos(n);
+	p(n);
 
 	return EXIT_SUCCESS;
 }
