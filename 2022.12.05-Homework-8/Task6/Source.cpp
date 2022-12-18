@@ -1,17 +1,30 @@
 #include <iostream>
-#include <cstring>
 
-char fun(char s, int p = 9);
+void h(int s, int max = 0);
 
 int main(int argc, char argv[])
 {
+	int s = 0;
 
+	std::cin >> s;
+
+	h(s);
+
+	std::cout << std::endl;
 }
 
-char fun(char s, int p)
+void h(int s, int max)
 {
-	for (int i = 0; i < strlen(s); i++)
+	if (s % 10 > max)
 	{
+		max = s % 10;
+	}
 
+	s = s / 10;
+
+	if (s != 0) return h(s, max);
+	if (s == 0)
+	{
+		std::cout << max << std::endl;
 	}
 }
