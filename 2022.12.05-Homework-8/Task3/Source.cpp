@@ -18,6 +18,6 @@ int bin(int n, int k)
 
     else
     {
-        return (bin(n - 1, k - 1) + bin(n-1, k));
+        return (bin(n - 1, k - 1) + bin(n - 1, k));
     }
 }
