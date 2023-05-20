@@ -24,31 +24,42 @@ private:
 	int m_strength;
 	int m_health;
 
-	friend void Fight(Animal animal1, Animal animal2);
+	void losehealth(int n) { m_health = m_health - n; }
 
 public:
 	AnimalName m_name;
 
-	Animal(AnimalType type = None, AnimalName name = Noname) 
+	Animal(AnimalType type = None) 
     {
 		this->m_type = type;
-		this->m_name = name;
 		this->m_health = 100;
+		this->m_strength = 0;
 
 		int x = 0;
-
-		srand(time(NULL));
+		int y = 0;
 
 		x = rand() % 20;
-		
-		if(m_type == Antelope)
+		y = rand() % 11;
+
+		if (y == 0) { y++; };
+
+		this->m_name = AnimalName(y);
+
+		if (m_type == None)
 		{
-			m_strength = 10 + x;
+			m_name = Noname;
+			m_health = 0;
+			m_strength = 0;
+		}
+		
+		else if(m_type == Antelope)
+		{
+			m_strength = 30 + x;
 		}
 
 		else if(m_type == Hare)
 		{
-			m_strength = x;
+			m_strength = 10 + x;
 		}
 
 		else if(m_type == Jackal)
@@ -68,7 +79,7 @@ public:
 
 		else if(m_type == Snake)
 		{
-			m_strength = 30 + x;
+			m_strength = 20 + x;
 		}
 	}
 
@@ -80,17 +91,19 @@ public:
 
 	~Animal() {}
 
-	Animal operator=(const Animal& animal)
+	Animal& operator=(const Animal& animal)
 	{
 		m_type = animal.m_type;
 		m_name = animal.m_name;
 		m_strength = animal.m_strength;
 		m_health = animal.m_health;
+
+		return *this;
 	}
 
 	void Printinfo()
 	{
-		std::cout << "тип: " << m_type <<  " " <<  "имя: " << m_name << " " << "сила: " << m_strength << std::endl;
+		std::cout << "тип: " << m_type <<  " " <<  "имя: " << m_name << " " << "сила: " << m_strength << " " << "здоровье: " << m_health << std::endl;
 	}
 
 	int GetType() { return m_type; }
@@ -103,44 +116,47 @@ public:
 
 	void Mighter() { m_strength = m_strength + 10; }
 
+	friend Animal Fight(Animal& animal1, Animal& animal2);
+
 	void SetCharacteristics(Surrounding sur, AnimalType type)
 	{
-		if(sur == Forrest)
+		if (sur == Desert)
 		{
-			if(m_type == Hare || m_type == Snake || m_type == Antelope || m_type == Jackal)
+			if (m_type == Lion || m_type == Antelope || m_type == Snake)
 			{
-				m_strength = m_strength + 10;
+				m_strength = m_strength + 20;
 			}
 		}
 
-		if(sur == Desert)
+		if (sur == Highlands)
 		{
-			if(m_type == Lion || m_type == Antelope || m_type == Snake)
+			if (m_type == Jackal || m_type == Antelope || m_type == Snake)
 			{
-				m_strength = m_strength + 10;
+				m_strength = m_strength + 20;
 			}
 		}
 
-		if(sur == Highlands)
+		if (sur == Forrest)
 		{
-			if(m_type == Jackal || m_type == Antelope || m_type == Snake)
+			if (m_type == Hare || m_type == Bear || m_type == Snake)
 			{
-				m_strength = m_strength + 10;
+				m_strength = m_strength + 20;
 			}
 		}
-	}
+     }
+
 };
 
-void Fight(Animal animal1, Animal animal2)
+Animal Fight(Animal& animal1, Animal& animal2)
 {
-	animal1.m_health = animal1.m_health - (animal2.m_health() / 10);
+	animal1.losehealth(animal2.GetStrength() / 10);
+
+	return animal1;
 };
 
 int randombattlefield()
 {
 	int x = 0;
-
-	srand(time(NULL));
 
 	x = rand() % 4;
 
@@ -149,60 +165,67 @@ int randombattlefield()
 	return x;
 };
 
-void vers(Animal animal1, Animal animal2)
+void vers(Animal& animal1, Animal& animal2)
 {
 	Surrounding sur = Surrounding(randombattlefield());
 
 	animal1.SetCharacteristics(sur, AnimalType(animal1.GetType()));
 	animal2.SetCharacteristics(sur, AnimalType(animal2.GetType()));
-	
-	int x = 0;
 
-	srand(time(NULL));
+	/*
+	animal1.Printinfo();
+	std::cout << "------------VERS----------------" << std::endl;
+	animal2.Printinfo();
+
+	std::cout << std::endl;
+	std::cout << std::endl;
+	*/
+
+	int x = 0;
 
 	x = rand() % 2;
 
-	if((animal2.GetHealth() > animal1.GetHealth()) || ((animal2.GetHealth() = animal1.GetHealth()) & (x == 0))
+	if ((animal2.GetHealth() > animal1.GetHealth()) || ((animal2.GetHealth() == animal1.GetHealth()) && (x == 0)))
 	{
 		Fight(animal1, animal2);
 
-			if(animal1.GetHealth < 0)
+		if (animal1.GetHealth() < 0)
+		{
+			animal2.Mighter();
+		}
+
+		else if (animal1.GetHealth() > 0)
+		{
+			Fight(animal2, animal1);
+
+			if (animal2.GetHealth() < 0)
 			{
-				animal2.Mighter();
-			};
+				animal1.Mighter();
+			}
+		}
+	}
 
-			else if(animal1.GetHealth > 0)
-			{
-				Fight(animal2, animal1);
-
-				if(animal2.GetHealth < 0)
-				{
-					animal1.Mighter();
-				};
-			};
-	};
-
-	else if((animal1.GetHealth() > animal2.GetHealth()) || ((animal2.GetHealth() = animal1.GetHealth()) & (x == 1))
+	else if((animal1.GetHealth() > animal2.GetHealth()) || ((animal2.GetHealth() == animal1.GetHealth()) && (x == 1)))
 	{
 		Fight(animal2, animal1);
 
-			if(animal2.GetHealth < 0)
+		if (animal2.GetHealth() < 0)
+		{
+			animal1.Mighter();
+		}
+
+		else if (animal2.GetHealth() > 0)
+		{
+			Fight(animal1, animal2);
+
+			if (animal1.GetHealth() < 0)
 			{
-				animal1.Mighter();
-			};
+				animal2.Mighter();
+			}
+		}
 
-			else if(animal2.GetHealth > 0)
-			{
-				Fight(animal1, animal2);
-
-				if(animal1.GetHealth < 0)
-				{
-					animal2.Mighter();
-				};
-			};
-	};
-
-}
+	}
+};
 
 int main(int argc, char argv[])
 {
@@ -212,26 +235,30 @@ int main(int argc, char argv[])
 
 	int n = 100;
 
-	Animal *A = new Animal[n] {0, 0};
+	Animal *A = new Animal[n] {AnimalType(0)};
+
+	int x = 0;
 
 	for (int i = 0; i < n; i++)
-	{
-		int x = 0;
-		int y = 0;
+	{		
+		x = rand() % 7;
 
-		x = rand();
-		y = rand();
+		if(x == 0) { x++; };
 
-		A[i](AnimalType(x), AnimalName(y));
+		AnimalType k = AnimalType(x);
+
+		Animal a(k);
+
+		A[i] = a;
 	}
 
 	int i = 0;
-
+	
 	while (n > 1)
 	{
 		vers(A[i], A[i + 1]);
 
-		if (A[i].GetHealth() < 0)
+		if (A[i].GetHealth() <= 0)
 		{
 			for (int j = i; j < n - 1; ++j)
 			{
@@ -251,13 +278,16 @@ int main(int argc, char argv[])
 
 		++i;
 
-		if (i > n - 1)
+		if (i >= n - 1)
 		{
 			i = 0;
 		}
 	}
 
-	A[1].Printinfo();
+	std::cout << std::endl;
+	std::cout << "WINER: ";
+	
+	A[0].Printinfo();
 
 	delete[] A;
 
